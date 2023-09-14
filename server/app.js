@@ -1,6 +1,7 @@
 const express = require("express")
 const morgan = require("morgan")
 const connectDB = require("./config/db")
+require("dotenv").config({path: "./config/config.env"})
 
 
 const app = express()
@@ -12,10 +13,7 @@ app.use(morgan("tiny"))
 
 // routes
 
-app.get("/", (req, res) => {
-    res.send("hello world")
-
-})
+app.use("/api", require("./routes/auth"))
 
 // server configuration
 
