@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const auth = require("../middlewares/auth")
 
 const User = require("../models/User")
 
@@ -71,12 +72,17 @@ router.post("/login", async (req, res) => {
 
         const payload = { _id: doesUserExits._id }
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" })
-        return res.status(200).json({token})
+        const user = { ...doesUserExits._doc, password: undefined }
+        return res.status(200).json({ token, user })
     } catch (error) {
 
         console.log(error)
         return res.status(500).json({ error: error.message })
     }
+})
+
+router.get("/me", auth, async (req, res) => {
+    return res.status(200).json({ ...req.user._doc })
 })
 
 module.exports = router
