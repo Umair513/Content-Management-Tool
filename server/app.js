@@ -17,6 +17,8 @@ app.get("/protected", auth, (req, res) => {
     return res.status(200).json({...req.user._doc})
 })
 app.use("/api", require("./routes/auth"))
+app.use("/api", require("./routes/contact"))
+
 
 // server configuration
 
